@@ -27,12 +27,20 @@ class Search(aima.Problem):
             else: actions are u, ul , l, dl, d, dr, r, ur'''
         pass
 
-    def step_cost(self, direc, coord):
-        #direc can be 'dg' (diagonal) or 'hv' (horizontal/vertical)
+    def result(self, state, action):
+        #depending on direction change the value of state to get your output state.
+        pass
+    def goal_test(self, state):
+        #if state == goal, both are of form [x,y]
+        pass
 
-        if direc == 'dg':
+    def path_cost(self, c, state1, action, state2):
+        #using action check against speed from state1 and state2, to calculate the total time
+        #all diagonals are in one if, all hv are in one elif.
+        '''if direc == 'dg':
             return np.sqrt(2)/2 * (self.map[self.currrow][self.currcol] + self.map[coord[0]][coord[1]])
-
+        '''
+        pass
 def main():
     parser = argparse.ArgumentParser(description='Plan a route through a grid.')
     parser.add_argument("grid", help="map/grid filename (a CSV file")
