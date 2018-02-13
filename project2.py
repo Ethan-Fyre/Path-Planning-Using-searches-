@@ -2,16 +2,30 @@
 # Ethan Sayles
 # February 6, 2018
 #
-# Purpose: Create a program that utilizes various searching algoritms to find the optimal solution through a terrain.
+# Purpose: Create a program that utilizes various searching algorithms to find the optimal solution through a terrain.
 
 import argparse
 import numpy as np
+import search as aima
 
-class Search:
-    def __init__(self,map, currrow = 0, currcol = 0):
-        self.currrow = currrow
-        self.currcol = currcol
-        self.map = map
+
+class Search(aima.Problem):
+    def __init__(self, initial, goal, graph):
+        aima.Problem.__init__(self, initial, goal)
+        self.graph = graph
+    def actions(self, state):
+        #State in this case is the coords of the current position
+        '''If edge piece only actions are away from edge
+            if state == [0,0]: actions are d, dr, r
+            elif state == [0,height]: actions are u, ur, r
+            elif state == [width, 0]: actions are l, dl, d
+            elif state == [width, height]: actions are u, ul, l
+            elif state[0] == 0: actions are u, ur, r, dr, d
+            elif state[0] == width: actions are u, ul, l, dl, d
+            elif state[1] == 0: actions are l, dl, d, dr, r
+            elif state[1] == height: actions are l, ul, u, ur, r
+            else: actions are u, ul , l, dl, d, dr, r, ur'''
+        pass
 
     def step_cost(self, direc, coord):
         #direc can be 'dg' (diagonal) or 'hv' (horizontal/vertical)
