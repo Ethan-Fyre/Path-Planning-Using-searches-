@@ -25,39 +25,40 @@ class Search(aima.Problem):
     def actions(self, state):
         """Return the possible directions given the current state. These directions
         are tuples that contain the amount in a direction that should change. e.g. 'up'
-         is (0,-1) because the x value does not change, and the y value is decremented"""
+         is (-1,0) because the x value does not change, and the y value is decremented.
+         Directions are of the form (y, x)."""
 
         # The four corners:
         if state == (0, 0):
-            #          d      dr      r
+            #          r      dr      d
             return [(0, 1), (1, 1), (1, 0)]
-        elif state == (0, self.height - 1):
-            #          u      ur      r
+        elif state == (0, self.width - 1):
+            #          l       dl       d
             return [(0, -1), (1, -1), (1, 0)]
-        elif state == (self.width - 1, 0):
-            #          d       dl       l
+        elif state == (self.height - 1, 0):
+            #          r       ur       u
             return [(0, 1), (-1, 1), (-1, 0)]
-        elif state == (self.width - 1, self.height - 1):
-            #          u        ul        l
+        elif state == (self.height - 1, self.width - 1):
+            #          l        ul        u
             return [(0, -1), (-1, -1), (-1, 0)]
 
-        # The left, right, top, and bottom edges:
+        # The top, bottom, left, and right edges:
         elif state[0] == 0:
-            #          u       ur       r       dr      d
+            #          l        dl       d      dr       r
             return [(0, -1), (1, -1), (1, 0), (1, 1), (0, 1)]
-        elif state[0] == self.width - 1:
-            #          u         ul       l        dl      d
+        elif state[0] == self.height - 1:
+            #          l        ul        u       ur       r
             return [(0, -1), (-1, -1), (-1, 0), (-1, 1), (0, 1)]
         elif state[1] == 0:
-            #          l        dl       d      dr       r
+            #          u       ur       r       dr      d
             return [(-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0)]
-        elif state[1] == self.height - 1:
-            #          l        ul        u       ur       r
+        elif state[1] == self.width - 1:
+            #          u         ul       l        dl      d
             return [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0)]
 
         # Any interior locations
         else:
-            #          u        ul        l        dl      d       dr      r       ur
+            #          l        ul        u        ur      r       dr      d       dl
             return [(0, -1), (-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1)]
 
     def result(self, state, action):
@@ -65,9 +66,8 @@ class Search(aima.Problem):
 
         # New state is a tuple of the current state and the direction
         new_state = (state[0] + action[0], state[1] + action[1])
-
         # if the speed of the new state is 0, return the current state (don't go anywhere)
-        if self.graph[new_state[1]][new_state[0]] != 0:
+        if self.graph[new_state] != 0:
             return new_state
         else:
             return state
@@ -75,15 +75,15 @@ class Search(aima.Problem):
     def path_cost(self, c, state1, action, state2):
         """Return the total solution cost required to traverse from state1 to state2
         given an action, and a cost up to this point."""
-        sp1 = self.graph[state1[1]][state1[0]]
-        sp2 = self.graph[state2[1]][state2[0]]
+        sp1 = self.graph[state1]
+        sp2 = self.graph[state2]
 
         # Prevent division by zero error
         if sp2 == 0:
             return c + aima.infinity
 
         # Check if horizontal or vertical movement
-        if action in ['d', 'r', 'u', 'l']:
+        if action in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
 
             # Equation is derived from the distance horizontally/vertically times the sum of
             # the inverse of the speeds. This results in a time for travel.
