@@ -18,7 +18,7 @@ The derivation of the step costs lies in geometry and unit analysis. The squares
 This program requires the following libraries: argparse, numpy, collections, math,  random, sys, bisect, operator, 
 os.path, functools, itertools.
 
-Most of these imports derive from the AIMA seaarch.py and utils.py files that are used in this program.
+Most of these imports derive from the AIMA search.py and utils.py files that are used in this program.
 
 
 

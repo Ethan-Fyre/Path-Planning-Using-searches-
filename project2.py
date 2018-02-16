@@ -23,39 +23,48 @@ class Search(aima.Problem):
         self.height = len(self.graph)
 
     def actions(self, state):
-        """Return the possible directions given the current state."""
+        """Return the possible directions given the current state. These directions
+        are tuples that contain the amount in a direction that should change. e.g. 'up'
+         is (0,-1) because the x value does not change, and the y value is decremented"""
 
         # The four corners:
         if state == (0, 0):
-            return ['d', 'dr', 'r']
+            #          d      dr      r
+            return [(0, 1), (1, 1), (1, 0)]
         elif state == (0, self.height - 1):
-            return ['u', 'ur', 'r']
+            #          u      ur      r
+            return [(0, -1), (1, -1), (1, 0)]
         elif state == (self.width - 1, 0):
-            return ['d', 'dl', 'l']
+            #          d       dl       l
+            return [(0, 1), (-1, 1), (-1, 0)]
         elif state == (self.width - 1, self.height - 1):
-            return ['u', 'ul', 'l']
+            #          u        ul        l
+            return [(0, -1), (-1, -1), (-1, 0)]
 
         # The left, right, top, and bottom edges:
         elif state[0] == 0:
-            return ['u', 'ur', 'r', 'dr', 'd']
+            #          u       ur       r       dr      d
+            return [(0, -1), (1, -1), (1, 0), (1, 1), (0, 1)]
         elif state[0] == self.width - 1:
-            return ['u', 'ul', 'l', 'dl', 'd']
+            #          u         ul       l        dl      d
+            return [(0, -1), (-1, -1), (-1, 0), (-1, 1), (0, 1)]
         elif state[1] == 0:
-            return ['l', 'dl', 'd', 'dr', 'r']
+            #          l        dl       d      dr       r
+            return [(-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0)]
         elif state[1] == self.height - 1:
-            return ['l', 'ul', 'u', 'ur', 'r']
+            #          l        ul        u       ur       r
+            return [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0)]
 
         # Any interior locations
         else:
-            return ['u', 'ul', 'l', 'dl', 'd', 'dr', 'r', 'ur']
+            #          u        ul        l        dl      d       dr      r       ur
+            return [(0, -1), (-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1)]
 
     def result(self, state, action):
         """Returns the output state given the current state and an action"""
 
-        switch = {'u': (0, -1), 'ul': (-1, -1), 'l': (-1, 0), 'dl': (-1, 1),
-                  'd': (0, 1), 'dr': (1, 1), 'r': (1, 0), 'ur': (1, -1)}
-
-        new_state = (state[0] + switch[action][0], state[1] + switch[action][1])
+        # New state is a tuple of the current state and the direction
+        new_state = (state[0] + action[0], state[1] + action[1])
 
         # if the speed of the new state is 0, return the current state (don't go anywhere)
         if self.graph[new_state[1]][new_state[0]] != 0:
